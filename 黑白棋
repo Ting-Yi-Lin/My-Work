@@ -1,0 +1,697 @@
+#include <stdio.h>
+
+int a=0;
+int b=0; 
+int checkplace=0;
+int black=0;
+int white=0;
+
+int board[8][8]={0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0,
+                 0,0,0,1,2,0,0,0,
+                 0,0,0,2,1,0,0,0,
+                 0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0,};
+
+void prboard(){                          //屜 
+    printf(" 0 1 2 3 4 5 6 7\n");
+    for(int y=0;y<8;y++)
+    {
+        printf("%d",y);
+        for(int x=0;x<8;x++)
+        {
+            if (board[y][x]==0)
+                printf("↓");
+            else if (board[y][x]==1)     //1岆窪伎 
+                printf("♀");
+            else if (board[y][x]==2)     //2岆啞伎 
+                printf("♂");
+        }
+        printf("\n");
+    }
+}    
+
+void change(int a,int b,int c){         //狟 
+
+	board[a][b]= c;
+
+} 
+
+int findblack(int a,int b){             //參笢嶲腔?伎 
+	int j=2;
+	int row,col;
+	while(1){                              //眻狟 
+    	row = a + j;
+    	col = b;
+    	if(row>7) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=a;i<row;i++){ 
+            	if(board[i][b]==2) {
+                	checkplace = 1;
+                	board[i][b] = 1;     //??伎                     
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+    
+	j=2;
+	while(1){                            //眻奻 
+    	row = a - j;
+    	col = b;
+    	if(row<0) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=row;i<a;i++){ 
+            	if(board[i][b]==2) {
+                	checkplace = 1;
+                	board[i][b] = 1;        //??伎 
+                }
+
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                                    //砃衵 
+    	row = a;
+    	col = b + j;
+    	if(col>7) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=b;i<col;i++){ 
+            	if(board[a][i]==2){
+                	checkplace = 1;
+                	board[a][i] = 1;        //??伎 
+                }
+
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                            //砃酘 
+    	row = a;
+    	col = b - j;
+    	if(col<0) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=col;i<b;i++){ 
+            	if(board[a][i]==2) {
+                	checkplace = 1;
+                	board[a][i] = 1;        //??伎                     
+                }
+            }
+    	break; 
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵狟 
+    	row = a+j;
+    	col = b+j;
+    	if(row>7 || col>7) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b+i]==2) {
+                	checkplace = 1;
+                	board[a+i][b+i] = 1;
+                }
+            }
+    	break;
+        }
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵奻 
+    	row = a-j;
+    	col = b+j;
+    	if(row<0 || col>7) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b+i]==2) {
+                	checkplace = 1;
+                	board[a-i][b+i] = 1;
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	j=2;    
+	while(1){                           //酘奻 
+    	row = a-j;
+    	col = b-j;
+    	if(row<0 || col<0) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b-i]==2) {
+                	checkplace = 1;
+                	board[a-i][b-i] = 1;
+                }
+            }
+    	break;
+        }
+    	j++;
+    }
+	j=2;
+	while(1){                           //酘狟 
+    	row = a+j;
+    	col = b-j;
+    	if(row>7 || col<0) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b-i]==2) {
+                	checkplace = 1;
+                	board[a+i][b-i] = 1;
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	if(checkplace==1) return 3;
+	else return 0;
+} 
+
+int checkblack(int a,int b){            // 復隅狟腔華源衄衄睫磁?隅  
+	int j=2;
+	int row,col;
+	int A=0;
+	while(1){                              //眻狟 
+    	row = a + j;
+    	col = b;
+    	int A=0;
+    	if(row>7) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=a;i<row;i++){ 
+            	if(board[i][b]==2) {
+                	A = 1;                    
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+    
+	j=2;
+	while(1){                            //眻奻 
+    	row = a - j;
+    	col = b;
+    	if(row<0) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=row;i<a;i++){ 
+            	if(board[i][b]==2) {
+                	A = 1;
+                }
+
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                                    //砃衵 
+    	row = a;
+    	col = b + j;
+    	if(col>7) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=b;i<col;i++){ 
+            	if(board[a][i]==2){
+                	A = 1;
+                }
+
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                            //砃酘 
+    	row = a;
+    	col = b - j;
+    	if(col<0) break;
+    	if(board[row][col] == 1){ 
+        	for(int i=col;i<b;i++){ 
+            	if(board[a][i]==2) {
+                	A = 1;                
+                }
+            }
+    	break; 
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵狟 
+    	row = a+j;
+    	col = b+j;
+    	if(row>7 || col>7) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b+i]==2) {
+                	A = 1;
+                }
+            }
+    	break;
+        }
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵奻 
+    	row = a-j;
+    	col = b+j;
+    	if(row<0 || col>7) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b+i]==2) {
+                	A = 1;
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	j=2;    
+	while(1){                           //酘奻 
+    	row = a-j;
+    	col = b-j;
+    	if(row<0 || col<0) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b-i]==2) {
+                	A = 1;
+                }
+            }
+    	break;
+        }
+    	j++;
+    }
+	j=2;
+	while(1){                           //酘狟 
+    	row = a+j;
+    	col = b-j;
+    	if(row>7 || col<0) break;
+    	if(board[row][col]==1){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b-i]==2) {
+                	A = 1;
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	if(A==1) return 3;
+	else return 0;
+} 
+
+int findwhite(int a,int b){             //參笢嶲腔?伎  
+	int j=2;
+	int row,col;
+	while(1){                              //眻狟 
+    	row = a + j;
+    	col = b;
+    	if(row>7) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=a;i<row;i++){ 
+            	if(board[i][b]==1) {
+                	checkplace = 1;
+                	board[i][b] = 2;          //??伎                 
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+    
+	j=2;
+	while(1){                            //眻奻 
+    	row = a - j;
+    	col = b;
+    	if(row<0) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=row;i<a;i++){ 
+            	if(board[i][b]==1){
+                	checkplace = 1;
+                	board[i][b] = 2;        //??伎 
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                            //砃衵 
+    	row = a;
+    	col = b + j;
+    	if(col>7) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=b;i<col;i++){ 
+            	if(board[a][i]==1) {
+                	checkplace = 1;
+                	board[a][i] = 2;        //??伎                    
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                            //砃酘 
+    	row = a;
+    	col = b - j;
+    	if(col<0) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=col;i<b;i++){ 
+            	if(board[a][i]==1) {
+                	checkplace = 1;
+                	board[a][i] = 2;        //??伎                    
+                }
+            }
+    	break; 
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵狟 
+    	row = a+j;
+    	col = b+j;
+    	if(row>7 || col>7) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b+i]==1) {
+                	checkplace = 1;
+                	board[a+i][b+i] = 2;                    
+                }
+            }
+    	break;
+        }
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵奻 
+    	row = a-j;
+    	col = b+j;
+    	if(row<0 || col>7) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b+i]==1) {
+                	checkplace = 1;
+                	board[a-i][b+i] = 2;                
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	j=2;    
+	while(1){                           //酘奻 
+    	row = a-j;
+    	col = b-j;
+    	if(row<0 || col<0) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b-i]==1) {
+                	checkplace = 1;
+                	board[a-i][b-i] = 2;                
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                           //酘狟 
+    	row = a+j;
+    	col = b-j;
+    	if(row>7 || col<0) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b-i]==1) {
+                	checkplace = 1;
+                	board[a+i][b-i] = 2;                
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	if(checkplace==1) return 3;
+	else return 0;
+}
+
+int checkwhite(int a,int b){            // 復隅狟腔華源衄衄睫磁?隅 
+	int j=2;
+	int row,col;
+	int B=0;
+	while(1){                              //眻狟 
+    	row = a + j;
+    	col = b;
+    	if(row>7) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=a;i<row;i++){ 
+            	if(board[i][b]==1) {
+                	B = 1;                
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+    
+	j=2;
+	while(1){                            //眻奻 
+    	row = a - j;
+    	col = b;
+    	if(row<0) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=row;i<a;i++){ 
+            	if(board[i][b]==1){
+                	B = 1;
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                            //砃衵 
+    	row = a;
+    	col = b + j;
+    	if(col>7) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=b;i<col;i++){ 
+            	if(board[a][i]==1) {
+                	B = 1;            
+                }
+            } 
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                            //砃酘 
+    	row = a;
+    	col = b - j;
+    	if(col<0) break;
+    	if(board[row][col] == 2){ 
+        	for(int i=col;i<b;i++){ 
+            	if(board[a][i]==1) {
+                	B = 1;                    
+                }
+            }
+    	break; 
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵狟 
+    	row = a+j;
+    	col = b+j;
+    	if(row>7 || col>7) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b+i]==1) {
+                	B = 1;                    
+                }
+            }
+    	break;
+        }
+    	j++;
+    }
+	j=2;
+	while(1){                           //衵奻 
+    	row = a-j;
+    	col = b+j;
+    	if(row<0 || col>7) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b+i]==1) {
+                	B = 1;                
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	j=2;    
+	while(1){                           //酘奻 
+    	row = a-j;
+    	col = b-j;
+    	if(row<0 || col<0) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a-i][b-i]==1) {
+                	B = 1;                
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	j=2;
+	while(1){                           //酘狟 
+    	row = a+j;
+    	col = b-j;
+    	if(row>7 || col<0) break;
+    	if(board[row][col]==2){
+        	for(int i=1;i<=j;i++){
+            	if(board[a+i][b-i]==1) {
+                	B = 1;                
+                }
+            }
+    	break;
+        } 
+    	j++;
+    }
+	if(B==1) return 3;
+	else return 0;
+}
+
+int Blacknoplacetoplay(){               // 梑衄衄華源褫眕狟 
+	int Bcanplay=0;
+	for(int i=0;i<8;i++){
+    	for(int j=0;j<8;j++){
+        	if(board[i][j]==0){
+            	if(checkblack(i,j)==3){
+                	Bcanplay=1;
+                }
+            }
+        }
+    }
+	if(Bcanplay==0) return 0;
+	else return 1;
+}
+
+int Whitenoplacetoplay(){               // 梑衄衄華源褫眕狟 
+	int Wcanplay=0;
+	for(int i=0;i<8;i++){
+    	for(int j=0;j<8;j++){
+        	if(board[i][j]==0){
+            	if(checkwhite(i,j)==3){
+                	Wcanplay = 1;
+                }
+            }
+        }
+    }
+	if(Wcanplay==0) return 0;
+	else return 1;
+}
+
+void count(){                           //?呾窪赽啞赽講 
+	for(int i=0;i<8;i++){
+    	for(int j=0;j<8;j++){
+        	if(board[i][j]==1) black++;
+        	else if(board[i][j]==2) white++;
+        } 
+    }
+}
+
+int noblack(){                          //復隅屜奻?衄衄窪ㄛ衄憩?賸 
+	int nob=0;
+	for(int i=0;i<8;i++){
+    	for(int j=0;j<8;j++){
+        	if(board[i][j]==1) nob=1;
+        } 
+    }
+	if(nob==1) return 1;
+	else return 0;
+}
+
+int nowhite(){                          //復隅屜奻?衄衄啞ㄛ衄憩?賸 
+	int now=0;
+	for(int i=0;i<8;i++){
+    	for(int j=0;j<8;j++){
+        	if(board[i][j]==2) now=1;
+        } 
+    }
+	if(now==1) return 1;
+	else return 0;
+}
+
+int gameover(){                         //絿磐旰腔璃 
+    
+	if( Blacknoplacetoplay()==0 && Whitenoplacetoplay()==0 || noblack==0 && nowhite==0)
+    	return 0;
+	else return 1;
+}
+
+int main(){
+	while(1){ 
+      
+      if(Blacknoplacetoplay()==1){
+          prboard();
+          printf("black go:");
+          scanf("%d %d",&a,&b);
+          while(a>7 || b>7){
+         	printf("can't play here\n");
+            printf("black go:");
+        	scanf("%d %d",&a,&b);   
+		  }
+          while(board[a][b]!=0){
+         	printf("can't play here\n");
+            printf("black go:");
+        	scanf("%d %d",&a,&b);         
+          }
+          findblack(a,b);
+          while(checkplace==0 ){  
+         	printf("can't play here\n");
+            printf("black go:");
+        	scanf("%d %d",&a,&b);
+        	findblack(a,b);
+          }
+          checkplace = 0;
+          change(a,b,1); 
+      }
+      else printf("Black has no place to play\n");
+      
+      if(Whitenoplacetoplay()==1){
+          prboard();
+          printf("white go:");
+          scanf("%d %d",&a,&b);
+          while(board[a][b]!=0){
+         	printf("can't play here\n");
+            printf("white go:");
+        	scanf("%d %d",&a,&b);         
+          }
+          findwhite(a,b);
+          while(checkplace==0){  
+         	printf("can't play here\n");
+            printf("white go:");
+        	scanf("%d %d",&a,&b);
+        	findwhite(a,b);
+          }
+          checkplace = 0;
+          change(a,b,2); 
+      }
+      else printf("White has no place to play\n");
+          if(gameover()==0) break;
+    }
+	printf("Game over\n\n");
+	count();
+	printf("Black:%2d  White:%2d\n",black,white);
+	if(black>white) printf("Black win\n");
+	else if(white>black) printf("White win");
+}
